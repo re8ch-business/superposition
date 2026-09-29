@@ -23,3 +23,5 @@ jobs:
         run: rustup toolchain install 1.90.0 --profile minimal
       - name: Run local key test
         run: cargo +1.90.0 test -p service_utils local_ciphertext_is_bound_to_secret_name --locked
+      - name: Check production server
+        run: cargo +1.90.0 check -p superposition --locked
