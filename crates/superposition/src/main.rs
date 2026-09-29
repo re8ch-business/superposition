@@ -128,6 +128,7 @@ async fn main() -> Result<()> {
     let app_env = get_from_env_unsafe("APP_ENV").expect("APP_ENV is not set");
     let kms_client = match app_env {
         AppEnv::DEV | AppEnv::TEST => None,
+        _ if kms::local_key_configured() => None,
         _ => Some(kms::new_client().await),
     };
 

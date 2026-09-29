@@ -17,7 +17,7 @@ pub async fn get_superposition_token(
         AppEnv::DEV | AppEnv::TEST | AppEnv::SANDBOX => {
             get_from_env_or_default("SUPERPOSITION_TOKEN", "123456".into())
         }
-        _ => kms::decrypt(kms_client.clone().unwrap(), "SUPERPOSITION_TOKEN").await,
+        _ => kms::decrypt(kms_client.clone(), "SUPERPOSITION_TOKEN").await,
     }
 }
 
@@ -29,7 +29,7 @@ pub async fn get_oidc_client_secret(
         AppEnv::DEV | AppEnv::TEST | AppEnv::SANDBOX => {
             get_from_env_or_default("OIDC_CLIENT_SECRET", "123456".into())
         }
-        _ => kms::decrypt(kms_client.clone().unwrap(), "OIDC_CLIENT_SECRET").await,
+        _ => kms::decrypt(kms_client.clone(), "OIDC_CLIENT_SECRET").await,
     }
 }
 
@@ -49,7 +49,7 @@ pub async fn get_database_url(
             get_from_env_or_default(&format!("{env_prefix}DB_PASSWORD"), "docker".into())
         }
         _ => {
-            let kms_client = kms_client.clone().unwrap();
+            let kms_client = kms_client.clone();
             let db_password_raw =
                 kms::decrypt(kms_client, &format!("{env_prefix}DB_PASSWORD")).await;
             encode(db_password_raw.as_str()).to_string()
