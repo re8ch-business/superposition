@@ -192,7 +192,7 @@ pub async fn get_master_encryption_keys(
             }))
         }
         _ => {
-            let kms_client = kms_client.clone().unwrap();
+            let kms_client = kms_client.clone();
             let decrypted_master_key =
                 crate::aws::kms::decrypt_opt(kms_client.clone(), "MASTER_ENCRYPTION_KEY")
                     .await

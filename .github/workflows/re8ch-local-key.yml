@@ -1,0 +1,27 @@
+name: RE8CH local production key
+
+on:
+  pull_request:
+    branches: [re8ch-v0.112.0]
+    paths:
+      - '.github/workflows/re8ch-local-key.yml'
+      - 'crates/service_utils/**'
+      - 'crates/superposition/src/main.rs'
+      - 'scripts/local_kms.py'
+  push:
+    branches: [feat/local-static-production-key]
+
+permissions:
+  contents: read
+
+jobs:
+  local-key:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        run: rustup toolchain install 1.90.0 --profile minimal
+      - name: Run local key test
+        run: cargo +1.90.0 test -p service_utils local_ciphertext_is_bound_to_secret_name --locked
+      - name: Check production server
+        run: cargo +1.90.0 check -p superposition --locked
